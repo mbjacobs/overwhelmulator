@@ -11,9 +11,10 @@ export default function HomePage() {
     <Box>
       <Alert severity="info">
         <AlertTitle>Hello 👋</AlertTitle>
-        Overwhemulator is an energy calculator. Add an event and rate the level
-        of energy that event gave (+) or took (-). Click CALCULATE to reveal
-        whether you have an energy deficit — this means you're overwhelmed!
+        Overwhemulator is an energy calculator. Add an event and rate the amount
+        of energy that event gave in pluses (+) or took in minuses (-). Click
+        CALCULATE to reveal whether you have an energy deficit — if you do, this
+        means you're overwhelmed!
       </Alert>
       <Grid container sx={{ marginTop: "3%" }}>
         <Typography sx={{ fontSize: "24px", fontWeight: "bold" }}>
