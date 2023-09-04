@@ -57,7 +57,7 @@ export const EnergyList = () => {
     return total;
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: any) => {
     let total = 0;
 
     values.energyList.forEach((item: EnergyItemProps) => {
@@ -76,7 +76,7 @@ export const EnergyList = () => {
         {({ values, isSubmitting, setFieldValue, submitForm }) => (
           <Form autoComplete="off">
             <FieldArray name="energyList">
-              {({ remove, push }) => (
+              {({ remove, push }: any) => (
                 <>
                   {values.energyList.length > 0 &&
                     values.energyList.map((_, index) => (
