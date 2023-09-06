@@ -1,12 +1,9 @@
 {
   "name": "material-next-app-router-ts",
   "version": "5.0.0",
-  "private": true,
-  "homepage": "https://mbjacobs.github.io/overwhelmulator/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "deploy": "gh-pages -d build",
     "start": "next start",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
