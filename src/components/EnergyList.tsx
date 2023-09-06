@@ -7,6 +7,9 @@ import {
   CircularProgress,
   Divider,
   Alert,
+  InputBase,
+  IconButton,
+  Paper,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
@@ -14,6 +17,8 @@ import { TextField } from "formik-mui";
 // import { EnergyItem } from "./EnergyItem";
 
 import CloseIcon from "@mui/icons-material/Close";
+import AddEnergyIcon from "@mui/icons-material/AddBox";
+import SubtractEnergyIcon from "@mui/icons-material/IndeterminateCheckBox";
 
 const MULTIPLIER = 100;
 
@@ -66,14 +71,28 @@ export const EnergyList = () => {
 
     setTotalEnergy(total);
 
-    console.log("my values", values);
+    // console.log("my values", values);
     return new Promise((res) => setTimeout(res, 1000));
+  };
+
+  const addEnergy = (values: any, index: number) => {
+    return (values.energyList[index].energyLevel += "+");
+  };
+
+  const subtractEnergy = (values: any, index: number) => {
+    return (values.energyList[index].energyLevel += "-");
   };
 
   return (
     <Box sx={{ width: "100%" }}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ values, isSubmitting, setFieldValue, submitForm }) => (
+        {({
+          values,
+          isSubmitting,
+          setFieldValue,
+          submitForm,
+          handleChange,
+        }) => (
           <Form autoComplete="off">
             <FieldArray name="energyList">
               {({ remove, push }: any) => (
@@ -81,6 +100,7 @@ export const EnergyList = () => {
                   {values.energyList.length > 0 &&
                     values.energyList.map((_, index) => (
                       <Box
+                        key={`energy-list-item-${index}`}
                         sx={{
                           display: "flex",
                           maxWidth: "100%",
@@ -97,16 +117,52 @@ export const EnergyList = () => {
                             flexGrow: 2,
                           }}
                         />
-                        <Field
-                          fullWidth
-                          name={`energyList.${index}.energyLevel`}
-                          component={TextField}
-                          label="Amount of Energy"
+                        <Paper
                           sx={{
+                            p: "2px 4px",
+                            display: "flex",
+                            alignItems: "center",
+                            width: 600,
                             marginRight: "2%",
                             flexGrow: 1,
-                          }}
-                        />
+                          }}>
+                          <InputBase
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder={"Amount of Energy"}
+                            inputProps={{ "aria-label": "enter energy" }}
+                            fullWidth
+                            name={`energyList.${index}.energyLevel`}
+                            value={values.energyList[index].energyLevel}
+                            onChange={handleChange}
+                          />
+                          <IconButton
+                            onClick={() => {
+                              setFieldValue(
+                                `energyList.${index}.energyLevel`,
+                                subtractEnergy(values, index)
+                              );
+                            }}
+                            sx={{ p: "10px" }}
+                            aria-label="subtract-energy">
+                            <SubtractEnergyIcon />
+                          </IconButton>
+                          <Divider
+                            sx={{ height: 28, m: 0.5 }}
+                            orientation="vertical"
+                          />
+                          <IconButton
+                            onClick={() => {
+                              setFieldValue(
+                                `energyList.${index}.energyLevel`,
+                                addEnergy(values, index)
+                              );
+                            }}
+                            type="button"
+                            sx={{ p: "10px" }}
+                            aria-label="add-energy">
+                            <AddEnergyIcon />
+                          </IconButton>
+                        </Paper>
                         <Button
                           disabled={isSubmitting}
                           onClick={() => remove(index)}>
@@ -118,7 +174,12 @@ export const EnergyList = () => {
                     sx={{ marginTop: "2%", marginBottom: "2%" }}></Divider>
                   <Button
                     disabled={isSubmitting}
-                    onClick={() => push(energyItem)}>
+                    onClick={() =>
+                      push({
+                        description: "",
+                        energyLevel: "",
+                      })
+                    }>
                     Add Item
                   </Button>
                 </>
@@ -130,9 +191,9 @@ export const EnergyList = () => {
               color="primary"
               variant="contained"
               startIcon={
-                isSubmitting ? (
+                isSubmitting && (
                   <CircularProgress size="0.9rem" sx={{ color: "white" }} />
-                ) : undefined
+                )
               }
               sx={{ marginLeft: "2%" }}>
               {isSubmitting ? "Calculating" : "Calculate"}
@@ -141,7 +202,7 @@ export const EnergyList = () => {
           </Form>
         )}
       </Formik>
-      {shouldRenderTotal ? (
+      {shouldRenderTotal && (
         <Box sx={{ marginTop: "2%" }}>
           <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
             ...your energy level is <strong>{totalEnergy}</strong>.
@@ -152,7 +213,7 @@ export const EnergyList = () => {
             </Alert>
           ) : undefined}
         </Box>
-      ) : undefined}
+      )}
     </Box>
   );
 };
